@@ -330,3 +330,10 @@ p {
   color: var(--c-text-dark);
   box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
+
+/* --- Leaflet Map --- */
+.leaflet-container {
+  width: 100%;
+  height: 100%;
+  border-radius: 0.5rem;
+}

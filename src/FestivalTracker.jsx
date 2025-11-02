@@ -18,11 +18,13 @@ const generatePairingCode = () => {
 };
 
 export default function FestivalTracker({ session }) {
-  const [user, setUser] = useState(session.user);
+  const [user] = useState(session.user);
+
+  // Check for your saved group info RIGHT NOW
   const existingGroupId = session.user?.user_metadata?.group_id || null;
   const existingPartnerName = session.user?.user_metadata?.partner_name || '';
 
-
+  // Initialize state based on that saved info
   const [myName, setMyName] = useState(session.user?.user_metadata?.full_name || existingPartnerName);
   const [isSetup, setIsSetup] = useState(!!existingGroupId); // true if group exists
   const [groupId, setGroupId] = useState(existingGroupId || '');
@@ -39,43 +41,6 @@ export default function FestivalTracker({ session }) {
   const [activeTab, setActiveTab] = useState('map'); // State for tabs
   const queryClient = useQueryClient();
 
-  // (All your data-fetching and helper functions remain the same)
-  // ...
-  // Load current user
-  // useEffect(() => {
-  //   const { data: authListener } = supabase.auth.onAuthStateChange(
-  //     (event, session) => {
-  //       const currentUser = session?.user;
-  //       setUser(currentUser); 
-  //       if (currentUser) {
-  //         const userData = currentUser.user_metadata;
-  //         if (userData.partner_name && userData.group_id) {
-  //           setMyName(userData.partner_name);
-  //           setGroupId(userData.group_id);
-  //           setIsSetup(true);
-  //           setShowPairingSetup(false);
-  //         }
-  //       }
-  //     }
-  //   );
-  //   const checkUser = async () => {
-  //     const { data: { user } } = await supabase.auth.getUser();
-  //     setUser(user);
-  //     if (user) {
-  //       const userData = user.user_metadata;
-  //       if (userData.partner_name && userData.group_id) {
-  //         setMyName(userData.partner_name);
-  //         setGroupId(userData.group_id);
-  //         setIsSetup(true);
-  //         setShowPairingSetup(false);
-  //       }
-  //     }
-  //   };
-  //   checkUser();
-  //   return () => {
-  //     authListener.subscription.unsubscribe();
-  //   };
-  // }, []);
 
   // Get battery level
   useEffect(() => {
@@ -467,8 +432,7 @@ export default function FestivalTracker({ session }) {
         <div className="tab-content">
           {activeTab === 'map' && (
             <>
-              <div className="card" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                {/* History Controls */}
+              <div className="card" style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
                 <button
                   onClick={() => setShowHistory(!showHistory)}
                   className="button button-outline"
@@ -477,13 +441,11 @@ export default function FestivalTracker({ session }) {
                   {showHistory ? 'Hide' : 'Show'} History
                 </button>
 
-                {/* THIS IS THE MISSING DROPDOWN */}
                 {showHistory && (
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                     <span style={{ fontSize: '0.875rem', color: '#555' }}>Period:</span>
                     <select
                       value={historyPeriod}
-                      // THIS IS THE FIX:
                       onChange={(e) => setHistoryPeriod(Number(e.target.value))}
                       className="input"
                       style={{ padding: '0.5rem', marginTop: 0, width: 'auto' }}
