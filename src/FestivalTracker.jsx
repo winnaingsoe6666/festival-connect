@@ -105,13 +105,23 @@ export default function FestivalTracker({ session }) {
 
   // Throttle location updates
   useEffect(() => {
-    if (!myLocation || !isSharing || !groupId) return;
+    if (!isSharing || !groupId) return; // Don't run if not sharing
+
+    // Send one update immediately when sharing starts
+    if (locationRef.current) {
+      updateLocationMutation.mutate(locationRef.current);
+    }
+
+    // Then set up the interval
     const interval = setInterval(() => {
-      updateLocationMutation.mutate(myLocation);
-    }, 30000); 
-    updateLocationMutation.mutate(myLocation); 
-    return () => clearInterval(interval);
-  }, [myLocation, isSharing, groupId, updateLocationMutation]);
+      // On each interval, send the *latest* location from the ref
+      if (locationRef.current) {
+        updateLocationMutation.mutate(locationRef.current);
+      }
+    }, 30000); // Send update every 30 seconds
+
+    return () => clearInterval(interval); // Clean up interval when sharing stops
+  }, [isSharing, groupId, updateLocationMutation]); // <-- FIXED DEPENDENCIES
 
   // Fetch current active locations
   const { data: allLocations = [] } = useQuery({
