@@ -27,12 +27,10 @@ export default function FestivalTracker({ session }) {
   const [isSetup, setIsSetup] = useState(!!existingGroupId); // true if group exists
   const [groupId, setGroupId] = useState(existingGroupId || '');
   const [showPairingSetup, setShowPairingSetup] = useState(!existingGroupId); // false if group exists
-  
+
   const [myLocation, setMyLocation] = useState(null);
   const [isSharing, setIsSharing] = useState(false);
   const [batteryLevel, setBatteryLevel] = useState(null);
-  const [groupId, setGroupId] = useState('');
-  const [showPairingSetup, setShowPairingSetup] = useState(true);
   const [pairingMode, setPairingMode] = useState(null);
   const [joinCode, setJoinCode] = useState('');
   const [copied, setCopied] = useState(false);
