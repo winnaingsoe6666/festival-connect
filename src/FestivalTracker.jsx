@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { supabase } from './lib/supabaseClient'; // Fixed path
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
@@ -40,6 +40,7 @@ export default function FestivalTracker({ session }) {
   const [historyPeriod, setHistoryPeriod] = useState(24); // hours
   const [activeTab, setActiveTab] = useState('map'); // State for tabs
   const queryClient = useQueryClient();
+  const locationRef = useRef(myLocation);
 
 
   // Get battery level
@@ -67,6 +68,7 @@ export default function FestivalTracker({ session }) {
           accuracy: position.coords.accuracy,
         };
         setMyLocation(location);
+        locationRef.current = location;
       },
       (error) => {
         console.error('Location error:', error);
