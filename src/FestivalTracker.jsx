@@ -19,8 +19,15 @@ const generatePairingCode = () => {
 
 export default function FestivalTracker({ session }) {
   const [user, setUser] = useState(session.user);
-  const [myName, setMyName] = useState(session.user?.user_metadata?.full_name || '');
-  const [isSetup, setIsSetup] = useState(false);
+  const existingGroupId = session.user?.user_metadata?.group_id || null;
+  const existingPartnerName = session.user?.user_metadata?.partner_name || '';
+
+
+  const [myName, setMyName] = useState(session.user?.user_metadata?.full_name || existingPartnerName);
+  const [isSetup, setIsSetup] = useState(!!existingGroupId); // true if group exists
+  const [groupId, setGroupId] = useState(existingGroupId || '');
+  const [showPairingSetup, setShowPairingSetup] = useState(!existingGroupId); // false if group exists
+  
   const [myLocation, setMyLocation] = useState(null);
   const [isSharing, setIsSharing] = useState(false);
   const [batteryLevel, setBatteryLevel] = useState(null);
